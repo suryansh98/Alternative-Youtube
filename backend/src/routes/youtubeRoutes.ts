@@ -133,10 +133,16 @@ router.get('/latest-videos', requireAuth, async (req: Request, res: Response) =>
         };
     }
 
+    const tenRandomSubscriptions = subscriptions.items?.length ?? 0;
+
+    const randomIndexes = Array.from({ length: 10 }, () => Math.floor(Math.random() * tenRandomSubscriptions));
+
     // Get only top 10 subscriptions and handle promises properly
-    const videoPromises = subscriptions?.items?.slice(0, 10)?.map(async (sub) => {
+    const videoPromises = subscriptions?.items?.map(async (sub, index) => {
         try {
-            return await youtubeService.getChannelLatestVideos(sub?.snippet?.resourceId?.channelId as string, 1);
+            if( randomIndexes.includes(index) ) {
+                return await youtubeService.getChannelLatestVideos(sub?.snippet?.resourceId?.channelId as string, 1);
+            }
         } catch (error) {
             console.error(`Error fetching videos for channel:`, error);
             return null;
