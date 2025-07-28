@@ -12,6 +12,8 @@ passport.use(new GoogleStrategy({
 }, (accessToken, refreshToken, profile, done) => {
   // Here you would typically save the user profile to your database
   // For now, we will just return the profile
+  console.log('Google profile:', profile);
+  console.log('Access Token:', accessToken);
   return done(null, {profile, accessToken}); //You pass these to done() to attach the data to the session
 }));
 
